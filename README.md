@@ -11,7 +11,7 @@ Port of the [CUDA Occupancy Calculator spreadsheet](https://developer.download.n
 ## Compilation
 
 ```shell
-coffee -c calculator.coffee
+coffee -c js/calculator.coffee
 ```
 
 ## Credits

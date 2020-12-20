@@ -1,17 +1,23 @@
+#fork-me {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 0;
+}
+
 .table td {
-    text-align: right;
-    width: 100px;
+  text-align: right;
+  width: 100px;
 }
 
 svg .current {
-    fill: red;
+  fill: red;
 }
 
-/* tell the SVG path to be a thin blue line without any area fill */
 path {
-	stroke: steelblue;
-	stroke-width: 1;
-	fill: none;
+  stroke: steelblue;
+  stroke-width: 1;
+  fill: none;
 }
 
 .axis {
@@ -19,7 +25,6 @@ path {
 }
 
 .x.axis line {
-  stroke: lightgrey;
   stroke: #000;
 }
 
@@ -33,6 +38,5 @@ path {
 
 .y.axis line, .y.axis path {
   fill: none;
-  stroke: #000;
   stroke: lightgrey;
 }

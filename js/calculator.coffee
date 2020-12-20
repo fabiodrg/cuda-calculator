@@ -272,17 +272,6 @@ mainConfig =
       maxThreadBlockSize: 1024
 
 
-
-gcd = (a,b) ->
-    while (b != 0)
-        [a, b] = [b, a % b]
-        # b = a % b
-        # a = t
-    return a
-
-lcm = (a,b) ->
-    a*b / gcd(a,b)
-
 ceil = (a,b) ->
     return Math.ceil(a / b) * b
 
@@ -302,9 +291,8 @@ window.calculate = (input) ->
             ceil( ceil( blockWarps(), config.warpAllocationGranularity ) * input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize )
             # debugger
         else
-            #Correct value is given, xls value is commented (no of warps per block)
+            # Correct value is given, xls value is commented (no of warps per block)
             ceil(input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize) * blockWarps()
-            #blockWarps()
 
     multiprocessorRegisters = () ->
         if config.allocationGranularity == 'block'
@@ -312,7 +300,6 @@ window.calculate = (input) ->
         else
             #Correct value is given, xls value is commented (no of warps per Multiprocessor)
             floor( config.registerFileSize/ ceil(input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize), config.warpAllocationGranularity ) * ceil(input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize)
-            #floor( config.registerFileSize/ ceil(input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize), config.warpAllocationGranularity )
 
     blockSharedMemory = () ->
         ceil(input.sharedMemoryPerBlock, config.sharedMemoryAllocationUnitSize)
@@ -325,7 +312,6 @@ window.calculate = (input) ->
             0
         else
             if input.registersPerThread > 0
-                #Math.floor( config.registerFileSize  / blockRegisters())
                 Math.floor(multiprocessorRegisters() / blockRegisters())
             else
                 config.threadBlocksPerMultiprocessor
@@ -394,7 +380,7 @@ window.calculateGraphs = (input) ->
             })
 
         return {
-            xlabel: "Threads Per Block"
+            x_label: "Threads Per Block"
             data: r
             current: current
         }
@@ -416,7 +402,7 @@ window.calculateGraphs = (input) ->
             })
 
         return {
-            xlabel: "Registers Per Thread"
+            x_label: "Registers Per Thread"
             data: r
             current: current
         }
@@ -440,7 +426,7 @@ window.calculateGraphs = (input) ->
             })
 
         return {
-            xlabel: "Shared Memory Per Block"
+            x_label: "Shared Memory Per Block"
             data: r
             current: current
         }
@@ -449,3 +435,5 @@ window.calculateGraphs = (input) ->
         graphWarpOccupancyOfThreadsPerBlock: graphWarpOccupancyOfThreadsPerBlock()
         graphWarpOccupancyOfRegistersPerThread: graphWarpOccupancyOfRegistersPerThread()
         graphWarpOccupancyOfSharedMemoryPerBlock: graphWarpOccupancyOfSharedMemoryPerBlock()
+
+    return output
