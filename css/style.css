@@ -13,33 +13,6 @@ caption {
   text-align: right;
 }
 
-svg .current {
-  fill: red;
-}
-
-path {
-  stroke: steelblue;
-  stroke-width: 1;
-  fill: none;
-}
-
-.axis {
-  shape-rendering: crispEdges;
-}
-
-.x.axis line {
-  stroke: #000;
-}
-
-.x.axis .minor {
-  stroke-opacity: .5;
-}
-
-.x.axis path {
-  display: none;
-}
-
-.y.axis line, .y.axis path {
-  fill: none;
-  stroke: lightgrey;
+.c3-axis-x-label, .c3-axis-y-label, .c3-xgrid-line {
+  font-size: 1rem;
 }
