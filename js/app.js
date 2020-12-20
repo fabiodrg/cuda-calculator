@@ -8,7 +8,7 @@ $(document).ready(() => {
     const data = calculate(d);
     const graph = calculateGraphs(d);
 
-    const $o = $("#output").show();
+    const $o = $("#output").removeAttr("hidden");
 
     _.forEach(data, (v, k) => $o.find("[data-value=" + k + "]").text(v));
 

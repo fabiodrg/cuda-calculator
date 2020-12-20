@@ -5,9 +5,12 @@
   border: 0;
 }
 
+caption {
+  caption-side: top;
+}
+
 .table td {
   text-align: right;
-  width: 100px;
 }
 
 svg .current {
