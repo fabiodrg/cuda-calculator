@@ -1,57 +1,49 @@
 function drawGraph(input, to) {
-  /* implementation heavily influenced by https://bl.ocks.org/1166403 */
+  // Implementation heavily influenced by https://bl.ocks.org/1166403
 
-  // define dimensions of graph
-  const m = [80, 80, 80, 80]; // margins
-  const w = 1000 - m[1] - m[3]; // width
-  const h = 400 - m[0] - m[2]; // height
+  const margins = [80, 80, 80, 80];
+  const width = 1000 - margins[1] - margins[3];
+  const height = 400 - margins[0] - margins[2];
 
-  // create a simple data array that we"ll plot with a line (this array represents only the Y values, X will just be the index location)
   const data = input.data;
   const xData = _.pluck(data, "key");
   const yData = _.pluck(data, "value");
   const current = input.current;
 
-  // X scale will fit all values from data[] within pixels 0-w
-  const x = d3.scale.linear().domain([d3.min(xData), d3.max(xData)]).range([0, w]);
-  // Y scale will fit values from 0-10 within pixels h-0 (Note the inverted domain for the y-scale: bigger is up!)
-  const y = d3.scale.linear().domain([0, d3.max(yData)]).range([h, 0]);
+  const x = d3.scaleLinear().domain([d3.min(xData), d3.max(xData)]).range([0, width]);
+  const y = d3.scaleLinear().domain([0, d3.max(yData)]).range([height, 0]);
 
   // create a line function that can convert data[] into x and y points
-  const line = d3.svg.line()
+  const line = d3.line()
       // assign the X function to plot our line as we wish
       .x(d => x(d.key))  // return the X coordinate where we want to plot this datapoint
       .y(d => y(d.value));  // return the Y coordinate where we want to plot this datapoint
 
   // Add an SVG element with the desired dimensions and margin.
   const graph = d3.select(to).append("svg:svg")
-      .attr("width", w + m[1] + m[3])
-      .attr("height", h + m[0] + m[2])
+      .attr("width", width + margins[1] + margins[3])
+      .attr("height", height + margins[0] + margins[2])
       .append("svg:g")
-      .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+      .attr("transform", "translate(" + margins[3] + "," + margins[0] + ")");
 
-  // create xAxis
-  const xAxis = d3.svg.axis().scale(x).tickSize(-8).tickSubdivide(32);
-  // Add the x-axis.
+  const xAxis = d3.axisBottom(x).tickSize(-8);
   graph.append("svg:g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + h + ")")
+      .attr("transform", "translate(0," + height + ")")
       .call(xAxis);
 
-  // create left yAxis
-  const yAxisLeft = d3.svg.axis().scale(y).tickSize(-w - 20).tickSubdivide(true).ticks(4).orient("left");
-  // Add the y-axis to the left
+  const yAxis = d3.axisLeft(y).tickSize(-width - 20).ticks(4);
   graph.append("svg:g")
       .attr("class", "y axis")
       .attr("transform", "translate(-25,0)")
-      .call(yAxisLeft);
+      .call(yAxis);
 
   // Add x axis label.
   graph.append("text")
       .attr("class", "x label")
       .attr("text-anchor", "end")
-      .attr("x", w)
-      .attr("y", h - 6)
+      .attr("x", width)
+      .attr("y", height - 6)
       .text(input.x_label);
 
   graph.append("text")

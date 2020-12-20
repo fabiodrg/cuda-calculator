@@ -8,9 +8,9 @@ $(document).ready(() => {
     const data = calculate(d);
     const graph = calculateGraphs(d);
 
-    const $o = $("#output").removeAttr("hidden");
+    const $output = $("#output").removeAttr("hidden");
 
-    _.forEach(data, (v, k) => $o.find("[data-value=" + k + "]").text(v));
+    _.forEach(data, (v, k) => $output.find("[data-value=" + k + "]").text(v));
 
     const gds = _.map(graph, v => {
       const vs = _.values(v.current);
@@ -33,8 +33,8 @@ $(document).ready(() => {
       return gd;
     });
 
-    $o.find("svg").remove();
-    const f = $o.find("figure");
+    $output.find("svg").remove();
+    const f = $output.find("figure");
     drawGraph(gds[0], f[0]);
     drawGraph(gds[1], f[1]);
     drawGraph(gds[2], f[2]);
