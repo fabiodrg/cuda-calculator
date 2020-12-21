@@ -22,7 +22,7 @@ function serializeArray(form) {
       });
       return;
     }
-    if (['checkbox', 'radio'].indexOf(field.type) >-1 && !field.checked) {
+    if (['checkbox', 'radio'].indexOf(field.type) > -1 && !field.checked) {
       return;
     }
     arr.push({
@@ -41,25 +41,25 @@ function docReady(fn) {
   }
 }
 
-function plot(input, target_element) {
+function plot(x, y, currentX, currentY, xLabel, targetElement) {
   const chart = c3.generate({
-    bindto: target_element,
+    bindto: targetElement,
     data: {
       xs: {
         " ": "x",
         "Current": "x current",
       },
       columns: [
-        ["x"].concat(input.data.map(d => d.key)),
-        [" "].concat(input.data.map(d => d.value)),
+        ["x"].concat(x),
+        [" "].concat(y),
 
-        ["x current", input.current.key],
-        ["Current", input.current.value],
+        ["x current", currentX],
+        ["Current", currentY],
       ],
     },
     axis: {
       x: {
-        label: input.x_label,
+        label: xLabel,
         min: 0,
         padding: {
           left: 0,
@@ -100,19 +100,19 @@ function onSubmit(e) {
 
   const formElement = e.target;
 
-  const d = Object.fromEntries(serializeArray(formElement)
-      .map(n => [n.name, n.value]));
+  const formData = Object.fromEntries(serializeArray(formElement).map(n => [n.name, n.value]));
 
-  const occupancyCalculationOutput = calculateOccupancy(d);
-  const graphValues = computeGraphsValues(d);
+  const occupancyCalculationOutput = calculateOccupancy(formData);
+  const graphValues = computeGraphsValues(formData);
 
   document.getElementById("output").removeAttribute("hidden");
 
   Object.entries(occupancyCalculationOutput)
       .forEach(([k, v]) => document.getElementById(k).innerText = v.toString());
 
-  const gds = Object.entries(graphValues).map(([_k, v]) => {
-    const vs = Object.entries(v.current).map(([_k, vc]) => vc);
+  const gds = Object.entries(graphValues).map(([_, v]) => {
+    const vs = Object.entries(v.current).map(([_, vc]) => vc);
+    console.log(vs);
     const gd = {
       current: {
         key: vs[0],
@@ -120,21 +120,24 @@ function onSubmit(e) {
       }
     };
 
-    gd.data = Object.entries(v.data).map(([_k, v]) => {
-      const vs = Object.entries(v).map(([_k, vc]) => vc);
+    gd.data = Object.entries(v.data).map(([_, v]) => {
+      const vs = Object.entries(v).map(([_, vc]) => vc);
       return {
         key: vs[0],
         value: vs[1]
       }
     });
-    gd.x_label = v.x_label;
+    gd.xLabel = v.xLabel;
 
     return gd;
   });
 
-  plot(gds[0], document.getElementById("block-chart"));
-  plot(gds[1], document.getElementById("register-chart"));
-  plot(gds[2], document.getElementById("memory-chart"));
+  plot(gds[0].data.map(d => d.key), gds[0].data.map(d => d.value), gds[0].current.key, gds[0].current.value,
+      gds[0].xLabel, document.getElementById("block-chart"));
+  plot(gds[1].data.map(d => d.key), gds[1].data.map(d => d.value), gds[1].current.key, gds[1].current.value,
+      gds[1].xLabel, document.getElementById("register-chart"));
+  plot(gds[2].data.map(d => d.key), gds[2].data.map(d => d.value), gds[2].current.key, gds[2].current.value,
+      gds[2].xLabel, document.getElementById("memory-chart"));
 }
 
 function main() {
