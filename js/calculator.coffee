@@ -279,7 +279,7 @@ floor = (a,b) ->
     return Math.floor(a / b) * b
 
 
-window.calculate = (input) ->
+window.calculateOccupancy = (input) ->
 
     config = mainConfig[input.version]
 
@@ -289,7 +289,6 @@ window.calculate = (input) ->
     blockRegisters = () ->
         if config.allocationGranularity == 'block'
             ceil( ceil( blockWarps(), config.warpAllocationGranularity ) * input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize )
-            # debugger
         else
             # Correct value is given, xls value is commented (no of warps per block)
             ceil(input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize) * blockWarps()
@@ -338,7 +337,6 @@ window.calculate = (input) ->
     occupancyOfMultiprocessor = () ->
         activeWarpsPerMultiprocessor() / config.warpsPerMultiprocessor
 
-
     output =
         activeThreadsPerMultiprocessor: activeThreadsPerMultiprocessor()
         activeWarpsPerMultiprocessor: activeWarpsPerMultiprocessor()
@@ -353,13 +351,11 @@ window.calculate = (input) ->
         threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor: threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor()
         threadBlocksPerMultiprocessorLimitedBySharedMemoryPerMultiprocessor: threadBlocksPerMultiprocessorLimitedBySharedMemoryPerMultiprocessor()
 
-
-
     output = _.extend output, config
 
     return output
 
-window.calculateGraphs = (input) ->
+window.computeGraphsValues = (input) ->
 
     config = mainConfig[input.version]
 
@@ -367,7 +363,7 @@ window.calculateGraphs = (input) ->
 
         current =
             threadsPerBlock: input.threadsPerBlock
-            activeWarpsPerMultiprocessor: window.calculate(input).activeWarpsPerMultiprocessor
+            activeWarpsPerMultiprocessor: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
 
         inp = _.clone input
         r = []
@@ -376,11 +372,11 @@ window.calculateGraphs = (input) ->
 
             r.push({
                 threadsPerBlock: threadsPerBlock
-                activeWarpsPerMultiprocessor: window.calculate(inp).activeWarpsPerMultiprocessor
+                activeWarpsPerMultiprocessor: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
             })
 
         return {
-            x_label: "Threads Per Block"
+            x_label: "Threads per block"
             data: r
             current: current
         }
@@ -389,7 +385,7 @@ window.calculateGraphs = (input) ->
 
         current =
             registersPerThread: input.registersPerThread
-            activeWarpsPerMultiprocessor: window.calculate(input).activeWarpsPerMultiprocessor
+            activeWarpsPerMultiprocessor: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
 
         inp = _.clone input
         r = []
@@ -398,22 +394,20 @@ window.calculateGraphs = (input) ->
 
             r.push({
                 registersPerThread: registersPerThread
-                activeWarpsPerMultiprocessor: window.calculate(inp).activeWarpsPerMultiprocessor
+                activeWarpsPerMultiprocessor: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
             })
 
         return {
-            x_label: "Registers Per Thread"
+            x_label: "Registers per thread"
             data: r
             current: current
         }
-
 
     graphWarpOccupancyOfSharedMemoryPerBlock = () ->
 
         current =
             sharedMemoryPerBlock: input.sharedMemoryPerBlock
-            activeWarpsPerMultiprocessor: window.calculate(input).activeWarpsPerMultiprocessor
-
+            activeWarpsPerMultiprocessor: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
 
         inp = _.clone input
         r = []
@@ -422,11 +416,11 @@ window.calculateGraphs = (input) ->
 
             r.push({
                 sharedMemoryPerBlock: sharedMemoryPerBlock
-                activeWarpsPerMultiprocessor: window.calculate(inp).activeWarpsPerMultiprocessor
+                activeWarpsPerMultiprocessor: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
             })
 
         return {
-            x_label: "Shared Memory Per Block"
+            x_label: "Shared memory per block"
             data: r
             current: current
         }

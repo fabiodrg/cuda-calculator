@@ -253,7 +253,7 @@
     return Math.floor(a / b) * b;
   };
 
-  window.calculate = function(input) {
+  window.calculateOccupancy = function(input) {
     var activeThreadBlocksPerMultiprocessor, activeThreadsPerMultiprocessor, activeWarpsPerMultiprocessor, blockRegisters, blockSharedMemory, blockWarps, config, multiprocessorRegisters, occupancyOfMultiprocessor, output, threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor, threadBlocksPerMultiprocessorLimitedBySharedMemoryPerMultiprocessor, threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor;
     config = mainConfig[input.version];
     blockWarps = function() {
@@ -325,14 +325,14 @@
     return output;
   };
 
-  window.calculateGraphs = function(input) {
+  window.computeGraphsValues = function(input) {
     var config, graphWarpOccupancyOfRegistersPerThread, graphWarpOccupancyOfSharedMemoryPerBlock, graphWarpOccupancyOfThreadsPerBlock, output;
     config = mainConfig[input.version];
     graphWarpOccupancyOfThreadsPerBlock = function() {
       var current, i, inp, r, ref, threadsPerBlock;
       current = {
         threadsPerBlock: input.threadsPerBlock,
-        activeWarpsPerMultiprocessor: window.calculate(input).activeWarpsPerMultiprocessor
+        activeWarpsPerMultiprocessor: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
       };
       inp = _.clone(input);
       r = [];
@@ -340,11 +340,11 @@
         inp.threadsPerBlock = threadsPerBlock;
         r.push({
           threadsPerBlock: threadsPerBlock,
-          activeWarpsPerMultiprocessor: window.calculate(inp).activeWarpsPerMultiprocessor
+          activeWarpsPerMultiprocessor: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
         });
       }
       return {
-        x_label: "Threads Per Block",
+        x_label: "Threads per block",
         data: r,
         current: current
       };
@@ -353,7 +353,7 @@
       var current, i, inp, r, ref, registersPerThread;
       current = {
         registersPerThread: input.registersPerThread,
-        activeWarpsPerMultiprocessor: window.calculate(input).activeWarpsPerMultiprocessor
+        activeWarpsPerMultiprocessor: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
       };
       inp = _.clone(input);
       r = [];
@@ -361,11 +361,11 @@
         inp.registersPerThread = registersPerThread;
         r.push({
           registersPerThread: registersPerThread,
-          activeWarpsPerMultiprocessor: window.calculate(inp).activeWarpsPerMultiprocessor
+          activeWarpsPerMultiprocessor: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
         });
       }
       return {
-        x_label: "Registers Per Thread",
+        x_label: "Registers per thread",
         data: r,
         current: current
       };
@@ -374,7 +374,7 @@
       var current, i, inp, r, ref, sharedMemoryPerBlock;
       current = {
         sharedMemoryPerBlock: input.sharedMemoryPerBlock,
-        activeWarpsPerMultiprocessor: window.calculate(input).activeWarpsPerMultiprocessor
+        activeWarpsPerMultiprocessor: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
       };
       inp = _.clone(input);
       r = [];
@@ -382,11 +382,11 @@
         inp.sharedMemoryPerBlock = sharedMemoryPerBlock;
         r.push({
           sharedMemoryPerBlock: sharedMemoryPerBlock,
-          activeWarpsPerMultiprocessor: window.calculate(inp).activeWarpsPerMultiprocessor
+          activeWarpsPerMultiprocessor: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
         });
       }
       return {
-        x_label: "Shared Memory Per Block",
+        x_label: "Shared memory per block",
         data: r,
         current: current
       };

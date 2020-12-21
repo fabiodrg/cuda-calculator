@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.css"
         integrity="sha512-cznfNokevSG7QPA5dZepud8taylLdvgr0lDqw/FEZIhluFsSwyvS81CMnRdrNSKwbsmc43LtRd2/WMQV+Z85AQ=="
         crossorigin="anonymous" />
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/index.css">
 
 </head>
 
@@ -23,8 +23,8 @@
 
   <form>
     <div class="form-group">
-      <label for="version">Compute Capability version</label>
-      <select class="form-control" id="version" name="version" autofocus>
+      <label for="ccVersion">Compute Capability version</label>
+      <select class="form-control" id="ccVersion" name="version" autofocus>
         <option value="1.0" selected="selected">1.0</option>
         <option value="1.1">1.1</option>
         <option value="1.2">1.2</option>
@@ -66,19 +66,19 @@
       <caption>GPU Occupancy Data is displayed here and in the graphs</caption>
       <tr>
         <th>Active Threads per Multiprocessor</th>
-        <td data-value="activeThreadsPerMultiprocessor"></td>
+        <td id="activeThreadsPerMultiprocessor"></td>
       </tr>
       <tr>
         <th>Active Warps per Multiprocessor</th>
-        <td data-value="activeWarpsPerMultiprocessor"></td>
+        <td id="activeWarpsPerMultiprocessor"></td>
       </tr>
       <tr>
         <th>Active Thread Blocks per Multiprocessor</th>
-        <td data-value="activeThreadBlocksPerMultiprocessor"></td>
+        <td id="activeThreadBlocksPerMultiprocessor"></td>
       </tr>
       <tr>
         <th>Occupancy of each Multiprocessor</th>
-        <td data-value="occupancyOfMultiprocessor"></td>
+        <td id="occupancyOfMultiprocessor"></td>
       </tr>
     </table>
 
@@ -86,47 +86,55 @@
       <caption>Physical Limits for GPU Compute Capability</caption>
       <tr>
         <th>Version</th>
-        <td data-value="version"></td>
+        <td id="version"></td>
       </tr>
       <tr>
         <th>Threads per Warp</th>
-        <td data-value="threadsPerWarp"></td>
+        <td id="threadsPerWarp"></td>
       </tr>
       <tr>
         <th>Warps per Multiprocessor</th>
-        <td data-value="warpsPerMultiprocessor"></td>
+        <td id="warpsPerMultiprocessor"></td>
       </tr>
       <tr>
         <th>Threads per Multiprocessor</th>
-        <td data-value="threadsPerMultiprocessor"></td>
+        <td id="threadsPerMultiprocessor"></td>
       </tr>
       <tr>
         <th>Thread Blocks per Multiprocessor</th>
-        <td data-value="threadBlocksPerMultiprocessor"></td>
+        <td id="threadBlocksPerMultiprocessor"></td>
       </tr>
       <tr>
         <th>Total # of 32-bit registers per Multiprocessor</th>
-        <td data-value="registerFileSize"></td>
+        <td id="registerFileSize"></td>
       </tr>
       <tr>
         <th>Register allocation unit size</th>
-        <td data-value="registerAllocationUnitSize"></td>
+        <td id="registerAllocationUnitSize"></td>
       </tr>
       <tr>
         <th>Register allocation granularity</th>
-        <td data-value="allocationGranularity"></td>
+        <td id="allocationGranularity"></td>
+      </tr>
+      <tr>
+        <th>Max registers per thread</th>
+        <td id="maxRegistersPerThread"></td>
       </tr>
       <tr>
         <th>Shared Memory per Multiprocessor (bytes)</th>
-        <td data-value="sharedMemoryPerMultiprocessor"></td>
+        <td id="sharedMemoryPerMultiprocessor"></td>
       </tr>
       <tr>
         <th>Shared Memory Allocation unit size</th>
-        <td data-value="sharedMemoryAllocationUnitSize"></td>
+        <td id="sharedMemoryAllocationUnitSize"></td>
       </tr>
       <tr>
         <th>Warp allocation granularity (for register allocation)</th>
-        <td data-value="warpAllocationGranularity"></td>
+        <td id="warpAllocationGranularity"></td>
+      </tr>
+      <tr>
+        <th>Max thread block size</th>
+        <td id="maxThreadBlockSize"></td>
       </tr>
     </table>
 
@@ -134,15 +142,15 @@
       <caption>Allocation Per Thread Block</caption>
       <tr>
         <th>Warps</th>
-        <td data-value="blockWarps"></td>
+        <td id="blockWarps"></td>
       </tr>
       <tr>
         <th>Registers</th>
-        <td data-value="blockRegisters"></td>
+        <td id="blockRegisters"></td>
       </tr>
       <tr>
         <th>Shared Memory</th>
-        <td data-value="blockSharedMemory"></td>
+        <td id="blockSharedMemory"></td>
       </tr>
     </table>
 
@@ -150,15 +158,15 @@
       <caption>Maximum Thread Blocks Per Multiprocessor</caption>
       <tr>
         <th>Limited by Max Warps / Blocks per Multiprocessor</th>
-        <td data-value="threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor"></td>
+        <td id="threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor"></td>
       </tr>
       <tr>
         <th>Limited by Registers per Multiprocessor</th>
-        <td data-value="threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor"></td>
+        <td id="threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor"></td>
       </tr>
       <tr>
         <th>Limited by Shared Memory per Multiprocessor</th>
-        <td data-value="threadBlocksPerMultiprocessorLimitedBySharedMemoryPerMultiprocessor"></td>
+        <td id="threadBlocksPerMultiprocessorLimitedBySharedMemoryPerMultiprocessor"></td>
       </tr>
     </table>
 
@@ -194,7 +202,7 @@
         crossorigin="anonymous"></script>
 
 <script src="js/calculator.js"></script>
-<script src="js/app.js"></script>
+<script src="js/index.js"></script>
 
 </body>
 </html>
