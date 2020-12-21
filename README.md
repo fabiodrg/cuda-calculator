@@ -7,6 +7,7 @@ Port of the [CUDA Occupancy Calculator spreadsheet](https://developer.download.n
 ## Changes from upstream
 
 * Extended until Compute Capabilities 7.0
+* Improved the UI.
 
 ## Compilation
 

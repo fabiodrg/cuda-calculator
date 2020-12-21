@@ -86,6 +86,9 @@ function plot(input, target_element) {
     legend: {
       show: false,
     },
+    padding: {
+      right: 20,
+    }
   });
 
   // To have no padding in axes but preventing the points from being dropped.
