@@ -271,6 +271,57 @@ mainConfig =
     warpAllocationGranularity: 4
     maxThreadBlockSize: 1024
 
+  '7.5':
+    version: '7.5'
+    threadsPerWarp: 32
+    warpsPerMultiprocessor: 32
+    threadsPerMultiprocessor: 1024
+    threadBlocksPerMultiprocessor: 16
+    sharedMemoryPerMultiprocessor: 65536
+
+    registerFileSize: 65536
+    registerAllocationUnitSize: 256
+
+    allocationGranularity: 'warp'
+    maxRegistersPerThread: 255
+    sharedMemoryAllocationUnitSize: 256
+    warpAllocationGranularity: 4
+    maxThreadBlockSize: 1024
+
+  '8.0':
+    version: '8.0'
+    threadsPerWarp: 32
+    warpsPerMultiprocessor: 64
+    threadsPerMultiprocessor: 2048
+    threadBlocksPerMultiprocessor: 32
+    sharedMemoryPerMultiprocessor: 167936
+
+    registerFileSize: 65536
+    registerAllocationUnitSize: 256
+
+    allocationGranularity: 'warp'
+    maxRegistersPerThread: 255
+    sharedMemoryAllocationUnitSize: 128
+    warpAllocationGranularity: 4
+    maxThreadBlockSize: 1024
+
+  '8.6':
+    version: '8.6'
+    threadsPerWarp: 32
+    warpsPerMultiprocessor: 48
+    threadsPerMultiprocessor: 1536
+    threadBlocksPerMultiprocessor: 16
+    sharedMemoryPerMultiprocessor: 102400
+
+    registerFileSize: 65536
+    registerAllocationUnitSize: 256
+
+    allocationGranularity: 'warp'
+    maxRegistersPerThread: 255
+    sharedMemoryAllocationUnitSize: 128
+    warpAllocationGranularity: 4
+    maxThreadBlockSize: 1024
+
 
 ceil = (a, b) -> Math.ceil(a / b) * b
 
@@ -295,7 +346,9 @@ window.calculateOccupancy = (input) ->
       config.registerFileSize
     else
       # The correct value is given, xls value is commented (no of warps per Multiprocessor)
-      floor(config.registerFileSize / ceil(input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize), config.warpAllocationGranularity) * ceil(input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize)
+      floor(config.registerFileSize / ceil(input.registersPerThread * config.threadsPerWarp,
+        config.registerAllocationUnitSize), config.warpAllocationGranularity) *
+        ceil(input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize)
 
   blockSharedMemory = () ->
     ceil(input.sharedMemoryPerBlock, config.sharedMemoryAllocationUnitSize)
@@ -380,7 +433,7 @@ window.computeGraphsValues = (input) ->
 
     inp = Object.assign({}, input)  # Shallow copy.
     r = []
-    for registersPerThread in [1..config.maxRegistersPerThread]
+    for registersPerThread in [0..config.maxRegistersPerThread]
       inp.registersPerThread = registersPerThread
 
       r.push({

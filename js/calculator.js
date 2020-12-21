@@ -242,6 +242,51 @@
       sharedMemoryAllocationUnitSize: 256,
       warpAllocationGranularity: 4,
       maxThreadBlockSize: 1024
+    },
+    '7.5': {
+      version: '7.5',
+      threadsPerWarp: 32,
+      warpsPerMultiprocessor: 32,
+      threadsPerMultiprocessor: 1024,
+      threadBlocksPerMultiprocessor: 16,
+      sharedMemoryPerMultiprocessor: 65536,
+      registerFileSize: 65536,
+      registerAllocationUnitSize: 256,
+      allocationGranularity: 'warp',
+      maxRegistersPerThread: 255,
+      sharedMemoryAllocationUnitSize: 256,
+      warpAllocationGranularity: 4,
+      maxThreadBlockSize: 1024
+    },
+    '8.0': {
+      version: '8.0',
+      threadsPerWarp: 32,
+      warpsPerMultiprocessor: 64,
+      threadsPerMultiprocessor: 2048,
+      threadBlocksPerMultiprocessor: 32,
+      sharedMemoryPerMultiprocessor: 167936,
+      registerFileSize: 65536,
+      registerAllocationUnitSize: 256,
+      allocationGranularity: 'warp',
+      maxRegistersPerThread: 255,
+      sharedMemoryAllocationUnitSize: 128,
+      warpAllocationGranularity: 4,
+      maxThreadBlockSize: 1024
+    },
+    '8.6': {
+      version: '8.6',
+      threadsPerWarp: 32,
+      warpsPerMultiprocessor: 48,
+      threadsPerMultiprocessor: 1536,
+      threadBlocksPerMultiprocessor: 16,
+      sharedMemoryPerMultiprocessor: 102400,
+      registerFileSize: 65536,
+      registerAllocationUnitSize: 256,
+      allocationGranularity: 'warp',
+      maxRegistersPerThread: 255,
+      sharedMemoryAllocationUnitSize: 128,
+      warpAllocationGranularity: 4,
+      maxThreadBlockSize: 1024
     }
   };
 
@@ -354,7 +399,7 @@
       };
       inp = Object.assign({}, input);
       r = [];
-      for (registersPerThread = i = 1, ref = config.maxRegistersPerThread; 1 <= ref ? i <= ref : i >= ref; registersPerThread = 1 <= ref ? ++i : --i) {
+      for (registersPerThread = i = 0, ref = config.maxRegistersPerThread; 0 <= ref ? i <= ref : i >= ref; registersPerThread = 0 <= ref ? ++i : --i) {
         inp.registersPerThread = registersPerThread;
         r.push({
           key: registersPerThread,

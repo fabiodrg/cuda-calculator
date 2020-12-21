@@ -2,11 +2,11 @@
 
 https://xmartlabs.github.io/cuda-calculator/
 
-Port of the [CUDA Occupancy Calculator spreadsheet](https://developer.download.nvidia.com/compute/cuda/CUDA_Occupancy_calculator.xls).
+Port of the [CUDA Occupancy Calculator spreadsheet](https://docs.nvidia.com/cuda/cuda-occupancy-calculator/CUDA_Occupancy_Calculator.xls).
 
 ## Changes from upstream
 
-* Extended until Compute Capabilities 7.0
+* Extended until Compute Capabilities 8.6
 * Improved the UI.
 
 ## Compilation
