@@ -50,8 +50,8 @@ function plot(input, target_element) {
         "Current": "x current",
       },
       columns: [
-        ["x"].concat(_.pluck(input.data, "key")),
-        [" "].concat(_.pluck(input.data, "value")),
+        ["x"].concat(input.data.map(d => d.key)),
+        [" "].concat(input.data.map(d => d.value)),
 
         ["x current", input.current.key],
         ["Current", input.current.value],
@@ -60,6 +60,11 @@ function plot(input, target_element) {
     axis: {
       x: {
         label: input.x_label,
+        min: 0,
+        padding: {
+          left: 0,
+          right: 0,
+        },
       },
       y: {
         label: {
@@ -104,7 +109,7 @@ function onSubmit(e) {
       .forEach(([k, v]) => document.getElementById(k).innerText = v.toString());
 
   const gds = Object.entries(graphValues).map(([_k, v]) => {
-    const vs = _.values(v.current);
+    const vs = Object.entries(v.current).map(([_k, vc]) => vc);
     const gd = {
       current: {
         key: vs[0],
@@ -113,7 +118,7 @@ function onSubmit(e) {
     };
 
     gd.data = Object.entries(v.data).map(([_k, v]) => {
-      const vs = _.values(v);
+      const vs = Object.entries(v).map(([_k, vc]) => vc);
       return {
         key: vs[0],
         value: vs[1]
