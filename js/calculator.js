@@ -328,16 +328,16 @@
     graphWarpOccupancyOfThreadsPerBlock = function() {
       var current, i, inp, r, ref, threadsPerBlock;
       current = {
-        threadsPerBlock: input.threadsPerBlock,
-        activeWarpsPerMultiprocessor: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
+        key: input.threadsPerBlock,
+        value: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
       };
       inp = Object.assign({}, input);
       r = [];
       for (threadsPerBlock = i = 32, ref = config.maxThreadBlockSize; i <= ref; threadsPerBlock = i += 32) {
         inp.threadsPerBlock = threadsPerBlock;
         r.push({
-          threadsPerBlock: threadsPerBlock,
-          activeWarpsPerMultiprocessor: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
+          key: threadsPerBlock,
+          value: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
         });
       }
       return {
@@ -349,16 +349,16 @@
     graphWarpOccupancyOfRegistersPerThread = function() {
       var current, i, inp, r, ref, registersPerThread;
       current = {
-        registersPerThread: input.registersPerThread,
-        activeWarpsPerMultiprocessor: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
+        key: input.registersPerThread,
+        value: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
       };
       inp = Object.assign({}, input);
       r = [];
       for (registersPerThread = i = 1, ref = config.maxRegistersPerThread; 1 <= ref ? i <= ref : i >= ref; registersPerThread = 1 <= ref ? ++i : --i) {
         inp.registersPerThread = registersPerThread;
         r.push({
-          registersPerThread: registersPerThread,
-          activeWarpsPerMultiprocessor: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
+          key: registersPerThread,
+          value: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
         });
       }
       return {
@@ -370,16 +370,16 @@
     graphWarpOccupancyOfSharedMemoryPerBlock = function() {
       var current, i, inp, r, ref, sharedMemoryPerBlock;
       current = {
-        sharedMemoryPerBlock: input.sharedMemoryPerBlock,
-        activeWarpsPerMultiprocessor: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
+        key: input.sharedMemoryPerBlock,
+        value: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
       };
       inp = Object.assign({}, input);
       r = [];
       for (sharedMemoryPerBlock = i = 0, ref = config.sharedMemoryPerMultiprocessor; i <= ref; sharedMemoryPerBlock = i += 512) {
         inp.sharedMemoryPerBlock = sharedMemoryPerBlock;
         r.push({
-          sharedMemoryPerBlock: sharedMemoryPerBlock,
-          activeWarpsPerMultiprocessor: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
+          key: sharedMemoryPerBlock,
+          value: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
         });
       }
       return {

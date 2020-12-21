@@ -354,8 +354,8 @@ window.computeGraphsValues = (input) ->
 
   graphWarpOccupancyOfThreadsPerBlock = () ->
     current =
-      threadsPerBlock: input.threadsPerBlock
-      activeWarpsPerMultiprocessor: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
+      key: input.threadsPerBlock
+      value: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
 
     inp = Object.assign({}, input)  # Shallow copy.
     r = []
@@ -363,8 +363,8 @@ window.computeGraphsValues = (input) ->
       inp.threadsPerBlock = threadsPerBlock
 
       r.push({
-        threadsPerBlock: threadsPerBlock
-        activeWarpsPerMultiprocessor: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
+        key: threadsPerBlock
+        value: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
       })
 
     return {
@@ -375,8 +375,8 @@ window.computeGraphsValues = (input) ->
 
   graphWarpOccupancyOfRegistersPerThread = () ->
     current =
-      registersPerThread: input.registersPerThread
-      activeWarpsPerMultiprocessor: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
+      key: input.registersPerThread
+      value: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
 
     inp = Object.assign({}, input)  # Shallow copy.
     r = []
@@ -384,8 +384,8 @@ window.computeGraphsValues = (input) ->
       inp.registersPerThread = registersPerThread
 
       r.push({
-        registersPerThread: registersPerThread
-        activeWarpsPerMultiprocessor: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
+        key: registersPerThread
+        value: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
       })
 
     return {
@@ -396,8 +396,8 @@ window.computeGraphsValues = (input) ->
 
   graphWarpOccupancyOfSharedMemoryPerBlock = () ->
     current =
-      sharedMemoryPerBlock: input.sharedMemoryPerBlock
-      activeWarpsPerMultiprocessor: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
+      key: input.sharedMemoryPerBlock
+      value: window.calculateOccupancy(input).activeWarpsPerMultiprocessor
 
     inp = Object.assign({}, input)  # Shallow copy.
     r = []
@@ -405,8 +405,8 @@ window.computeGraphsValues = (input) ->
       inp.sharedMemoryPerBlock = sharedMemoryPerBlock
 
       r.push({
-        sharedMemoryPerBlock: sharedMemoryPerBlock
-        activeWarpsPerMultiprocessor: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
+        key: sharedMemoryPerBlock
+        value: window.calculateOccupancy(inp).activeWarpsPerMultiprocessor
       })
 
     return {

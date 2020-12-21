@@ -103,41 +103,16 @@ function onSubmit(e) {
   const formData = Object.fromEntries(serializeArray(formElement).map(n => [n.name, n.value]));
 
   const occupancyCalculationOutput = calculateOccupancy(formData);
-  const graphValues = computeGraphsValues(formData);
+  const graphsValues = computeGraphsValues(formData);
 
   document.getElementById("output").removeAttribute("hidden");
 
   Object.entries(occupancyCalculationOutput)
       .forEach(([k, v]) => document.getElementById(k).innerText = v.toString());
 
-  const gds = Object.entries(graphValues).map(([_, v]) => {
-    const vs = Object.entries(v.current).map(([_, vc]) => vc);
-    console.log(vs);
-    const gd = {
-      current: {
-        key: vs[0],
-        value: vs[1]
-      }
-    };
-
-    gd.data = Object.entries(v.data).map(([_, v]) => {
-      const vs = Object.entries(v).map(([_, vc]) => vc);
-      return {
-        key: vs[0],
-        value: vs[1]
-      }
-    });
-    gd.xLabel = v.xLabel;
-
-    return gd;
-  });
-
-  plot(gds[0].data.map(d => d.key), gds[0].data.map(d => d.value), gds[0].current.key, gds[0].current.value,
-      gds[0].xLabel, document.getElementById("block-chart"));
-  plot(gds[1].data.map(d => d.key), gds[1].data.map(d => d.value), gds[1].current.key, gds[1].current.value,
-      gds[1].xLabel, document.getElementById("register-chart"));
-  plot(gds[2].data.map(d => d.key), gds[2].data.map(d => d.value), gds[2].current.key, gds[2].current.value,
-      gds[2].xLabel, document.getElementById("memory-chart"));
+  Object.entries(graphsValues).forEach(([k, v]) =>
+      plot(v.data.map(d => d.key), v.data.map(d => d.value), v.current.key, v.current.value, v.xLabel,
+          document.getElementById(k)));
 }
 
 function main() {
