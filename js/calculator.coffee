@@ -296,24 +296,21 @@ floor = (a, b) -> Math.floor(a / b) * b
 window.calculateOccupancy = (input) ->
   config = mainConfig[input.version]
 
+  # number of warps per block
   blockWarps = () ->
     Math.ceil(input.threadsPerBlock / config.threadsPerWarp)
 
-  blockRegisters = () ->
-    if config.allocationGranularity == 'block'
-      ceil(ceil(blockWarps(), config.warpAllocationGranularity) * input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize)
-    else
-      # The correct value is given, xls value is commented (no of warps per block).
-      ceil(input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize) * blockWarps()
+  # number of registers per warp
+  registersPerWarp = () ->
+    ceil(input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize)
 
-  multiprocessorRegisters = () ->
-    if config.allocationGranularity == 'block'
-      config.registerFileSize
-    else
-      # The correct value is given, xls value is commented (no of warps per Multiprocessor)
-      floor(config.registerFileSize / ceil(input.registersPerThread * config.threadsPerWarp,
-        config.registerAllocationUnitSize), config.warpAllocationGranularity) *
-        ceil(input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize)
+  # number of registers per block
+  blockRegisters = () ->
+      registersPerWarp() * blockWarps()
+
+  # maximum warps per SM when limited by registers
+  warpsPerMultiprocessorLimitedByRegisters = () ->
+    floor(config.maxRegistersPerBlock / registersPerWarp(), config.warpAllocationGranularity)
 
   blockSharedMemory = () ->
     ceil(input.sharedMemoryPerBlock, config.sharedMemoryAllocationUnitSize)
@@ -325,7 +322,8 @@ window.calculateOccupancy = (input) ->
     if input.registersPerThread > config.maxRegistersPerThread
       0
     else if input.registersPerThread > 0
-      Math.floor(multiprocessorRegisters() / blockRegisters())
+      Math.floor(warpsPerMultiprocessorLimitedByRegisters() / blockWarps()) *
+        Math.floor(config.registerFileSize / config.maxRegistersPerBlock)
     else
       config.threadBlocksPerMultiprocessor
 
