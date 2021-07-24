@@ -316,7 +316,9 @@ window.calculateOccupancy = (input) ->
     ceil(input.sharedMemoryPerBlock, config.sharedMemoryAllocationUnitSize)
 
   threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor = () ->
-    Math.min(config.threadBlocksPerMultiprocessor, Math.floor(config.warpsPerMultiprocessor / blockWarps()))
+    Math.min(
+      config.threadBlocksPerMultiprocessor, Math.floor(config.warpsPerMultiprocessor / blockWarps())
+    )
 
   threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor = () ->
     if input.registersPerThread > config.maxRegistersPerThread
@@ -359,9 +361,12 @@ window.calculateOccupancy = (input) ->
     blockSharedMemory: blockSharedMemory()
     blockRegisters: blockRegisters()
 
-    threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor: threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor()
-    threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor: threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor()
-    threadBlocksPerMultiprocessorLimitedBySharedMemoryPerMultiprocessor: threadBlocksPerMultiprocessorLimitedBySharedMemoryPerMultiprocessor()
+    threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor:
+      threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor()
+    threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor:
+      threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor()
+    threadBlocksPerMultiprocessorLimitedBySharedMemoryPerMultiprocessor:
+      threadBlocksPerMultiprocessorLimitedBySharedMemoryPerMultiprocessor()
 
   return Object.assign(output, config)
 
