@@ -12,6 +12,7 @@ mainConfig =
 
     allocationGranularity: 'block'
     maxRegistersPerThread: 124
+    maxRegistersPerBlock: null
     sharedMemoryAllocationUnitSize: 512
     warpAllocationGranularity: 2
     maxThreadBlockSize: 512
@@ -29,6 +30,7 @@ mainConfig =
 
     allocationGranularity: 'block'
     maxRegistersPerThread: 124
+    maxRegistersPerBlock: null
     sharedMemoryAllocationUnitSize: 512
     warpAllocationGranularity: 2
     maxThreadBlockSize: 512
@@ -46,6 +48,7 @@ mainConfig =
 
     allocationGranularity: 'block'
     maxRegistersPerThread: 124
+    maxRegistersPerBlock: null
     sharedMemoryAllocationUnitSize: 512
     warpAllocationGranularity: 2
     maxThreadBlockSize: 512
@@ -63,6 +66,7 @@ mainConfig =
 
     allocationGranularity: 'block'
     maxRegistersPerThread: 124
+    maxRegistersPerBlock: null
     sharedMemoryAllocationUnitSize: 512
     warpAllocationGranularity: 2
     maxThreadBlockSize: 512
@@ -80,6 +84,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 63
+    maxRegistersPerBlock: 32768
     sharedMemoryAllocationUnitSize: 128
     warpAllocationGranularity: 2
     maxThreadBlockSize: 1024
@@ -97,6 +102,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 63
+    maxRegistersPerBlock: 32768
     sharedMemoryAllocationUnitSize: 128
     warpAllocationGranularity: 2
     maxThreadBlockSize: 1024
@@ -114,6 +120,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 63
+    maxRegistersPerBlock: 65536
     sharedMemoryAllocationUnitSize: 256
     warpAllocationGranularity: 4
     maxThreadBlockSize: 1024
@@ -131,6 +138,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 255
+    maxRegistersPerBlock: 65536
     sharedMemoryAllocationUnitSize: 256
     warpAllocationGranularity: 4
     maxThreadBlockSize: 1024
@@ -148,6 +156,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 255
+    maxRegistersPerBlock: 65536
     sharedMemoryAllocationUnitSize: 256
     warpAllocationGranularity: 4
     maxThreadBlockSize: 1024
@@ -165,6 +174,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 255
+    maxRegistersPerBlock: 65536
     sharedMemoryAllocationUnitSize: 256
     warpAllocationGranularity: 4
     maxThreadBlockSize: 1024
@@ -182,6 +192,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 255
+    maxRegistersPerBlock: 32768
     sharedMemoryAllocationUnitSize: 256
     warpAllocationGranularity: 4
     maxThreadBlockSize: 1024
@@ -199,6 +210,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 255
+    maxRegistersPerBlock: 32768
     sharedMemoryAllocationUnitSize: 256
     warpAllocationGranularity: 4
     maxThreadBlockSize: 1024
@@ -216,6 +228,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 255
+    maxRegistersPerBlock: 65536
     sharedMemoryAllocationUnitSize: 256
     warpAllocationGranularity: 2
     maxThreadBlockSize: 1024
@@ -233,6 +246,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 255
+    maxRegistersPerBlock: 65536
     sharedMemoryAllocationUnitSize: 256
     warpAllocationGranularity: 4
     maxThreadBlockSize: 1024
@@ -250,6 +264,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 255
+    maxRegistersPerBlock: 65536
     sharedMemoryAllocationUnitSize: 256
     warpAllocationGranularity: 4
     maxThreadBlockSize: 1024
@@ -267,6 +282,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 255
+    maxRegistersPerBlock: 65536
     sharedMemoryAllocationUnitSize: 256
     warpAllocationGranularity: 4
     maxThreadBlockSize: 1024
@@ -284,6 +300,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 255
+    maxRegistersPerBlock: 65536
     sharedMemoryAllocationUnitSize: 256
     warpAllocationGranularity: 4
     maxThreadBlockSize: 1024
@@ -301,6 +318,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 255
+    maxRegistersPerBlock: 65536
     sharedMemoryAllocationUnitSize: 128
     warpAllocationGranularity: 4
     maxThreadBlockSize: 1024
@@ -318,6 +336,7 @@ mainConfig =
 
     allocationGranularity: 'warp'
     maxRegistersPerThread: 255
+    maxRegistersPerBlock: 65536
     sharedMemoryAllocationUnitSize: 128
     warpAllocationGranularity: 4
     maxThreadBlockSize: 1024
@@ -356,11 +375,24 @@ window.calculateOccupancy = (input) ->
   threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor = () ->
     Math.min(config.threadBlocksPerMultiprocessor, Math.floor(config.warpsPerMultiprocessor / blockWarps()))
 
+  registersPerWarp = () ->
+    ceil(input.registersPerThread * config.threadsPerWarp, config.registerAllocationUnitSize)
+  console.log('reg per warp', registersPerWarp())
+  
+  warpsPerBlockLimitedByRegisters = () ->
+    blockWarps()
+  console.log('warps per block, reg limited', warpsPerBlockLimitedByRegisters())
+  
+  warpsPerMultiprocessorLimitedByRegisters = () ->
+    floor(config.maxRegistersPerBlock/registersPerWarp(), config.warpAllocationGranularity)
+  console.log('warps per SM, reg limited', warpsPerMultiprocessorLimitedByRegisters())
+
   threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor = () ->
     if input.registersPerThread > config.maxRegistersPerThread
       0
     else if input.registersPerThread > 0
-      Math.floor(multiprocessorRegisters() / blockRegisters())
+      # Math.floor(multiprocessorRegisters() / blockRegisters())
+      Math.floor(warpsPerMultiprocessorLimitedByRegisters()/blockWarps()) * Math.floor(config.registerFileSize/config.maxRegistersPerBlock)
     else
       config.threadBlocksPerMultiprocessor
 
