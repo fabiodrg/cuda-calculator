@@ -287,6 +287,10 @@ mainConfig =
     warpAllocationGranularity: 4
     maxThreadBlockSize: 1024
 
+# Starting with Compute Capability 8.x, CUDA runtime uses 1KB of Shared Memory
+cudaRuntimeUsedSharedMemory =
+  '11.0': 1024
+  '11.1': 1024
 
 ceil = (a, b) -> Math.ceil(a / b) * b
 
@@ -312,8 +316,20 @@ window.calculateOccupancy = (input) ->
   warpsPerMultiprocessorLimitedByRegisters = () ->
     floor(config.maxRegistersPerBlock / registersPerWarp(), config.warpAllocationGranularity)
 
+  # starting with Compute Capability 8.x, the CUDA runtime consumes 1KB of shared memory
+  # the amount might change depending on the CUDA runtime version in the future
+  cudaRuntimeSharedMemory = () ->
+    if Number.parseFloat(input.version) >= 8
+      cudaRuntimeUsedSharedMemory[input.cudaVersion]
+    else
+      0
+
+  # shared memory per thread block
   blockSharedMemory = () ->
-    ceil(input.sharedMemoryPerBlock, config.sharedMemoryAllocationUnitSize)
+    ceil(
+      Number.parseInt(input.sharedMemoryPerBlock) + cudaRuntimeSharedMemory(),
+      config.sharedMemoryAllocationUnitSize
+    )
 
   threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor = () ->
     Math.min(
