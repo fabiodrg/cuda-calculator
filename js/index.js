@@ -108,15 +108,36 @@ function onSubmit(e) {
   document.getElementById("output").removeAttribute("hidden");
 
   Object.entries(occupancyCalculationOutput)
-      .forEach(([k, v]) => document.getElementById(k).innerText = v.toString());
+    .forEach(([k, v]) => document.getElementById(k).innerText = v.toString());
 
   Object.entries(graphsValues).forEach(([k, v]) =>
-      plot(v.data.map(d => d.key), v.data.map(d => d.value), v.current.key, v.current.value, v.xLabel,
-          document.getElementById(k)));
+    plot(v.data.map(d => d.key), v.data.map(d => d.value), v.current.key, v.current.value, v.xLabel,
+      document.getElementById(k)));
 }
 
 function main() {
   document.getElementsByTagName("form")[0].onsubmit = onSubmit;
+
+  // add event listener for changes on Compute Capability selector
+  document.querySelector("#ccVersion").addEventListener('change', (event) => {
+    // selected compute capability version
+    const cc = Number.parseFloat(event.target.value);
+
+    // get the div element with the selector for cuda version
+    const $cudaVersionBlock = document.querySelector("#cudaVersion").closest("div");
+
+    // if CC >= 8.x, show the CUDA runtime version selector, else hide it
+    if (cc >= 8) {
+      $cudaVersionBlock.removeAttribute("hidden");
+    } else {
+      $cudaVersionBlock.setAttribute("hidden", "");
+    }
+  });
+
+  // set the default Compute Capability (latest version)
+  const $ccSelect = document.querySelector("#ccVersion");
+  $ccSelect.selectedIndex = $ccSelect.options.length - 1;
+  $ccSelect.dispatchEvent(new Event('change'));
 }
 
 docReady(main);
