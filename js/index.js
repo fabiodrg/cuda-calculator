@@ -113,6 +113,14 @@ function onSubmit(e) {
   Object.entries(graphsValues).forEach(([k, v]) =>
     plot(v.data.map(d => d.key), v.data.map(d => d.value), v.current.key, v.current.value, v.xLabel,
       document.getElementById(k)));
+
+  // show or hide the alert for Shared Memory used by Cuda Runtime
+  const $alert = document.querySelector("#alertCudaRuntimeSharedMemory");
+  if (Number.parseFloat(occupancyCalculationOutput.version) >= 8.0) {
+    $alert.removeAttribute("hidden");
+  } else {
+    $alert.setAttribute("hidden", "");
+  }
 }
 
 function main() {

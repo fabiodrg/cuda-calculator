@@ -275,7 +275,7 @@
   };
 
   window.calculateOccupancy = function(input) {
-    var activeThreadBlocksPerMultiprocessor, activeThreadsPerMultiprocessor, activeWarpsPerMultiprocessor, blockRegisters, blockSharedMemory, blockWarps, config, cudaRuntimeSharedMemory, occupancyOfMultiprocessor, output, registersPerWarp, threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor, threadBlocksPerMultiprocessorLimitedBySharedMemoryPerMultiprocessor, threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor, warpsPerMultiprocessorLimitedByRegisters;
+    var activeThreadBlocksPerMultiprocessor, activeThreadsPerMultiprocessor, activeWarpsPerMultiprocessor, blockCudaRuntimeSharedMemory, blockRegisters, blockSharedMemory, blockWarps, config, occupancyOfMultiprocessor, output, registersPerWarp, threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor, threadBlocksPerMultiprocessorLimitedBySharedMemoryPerMultiprocessor, threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor, warpsPerMultiprocessorLimitedByRegisters;
     config = mainConfig[input.version];
     blockWarps = function() {
       return Math.ceil(input.threadsPerBlock / config.threadsPerWarp);
@@ -289,7 +289,7 @@
     warpsPerMultiprocessorLimitedByRegisters = function() {
       return floor(config.maxRegistersPerBlock / registersPerWarp(), config.warpAllocationGranularity);
     };
-    cudaRuntimeSharedMemory = function() {
+    blockCudaRuntimeSharedMemory = function() {
       if (Number.parseFloat(input.version) >= 8) {
         return cudaRuntimeUsedSharedMemory[input.cudaVersion];
       } else {
@@ -297,7 +297,7 @@
       }
     };
     blockSharedMemory = function() {
-      return ceil(Number.parseInt(input.sharedMemoryPerBlock) + cudaRuntimeSharedMemory(), config.sharedMemoryAllocationUnitSize);
+      return ceil(Number.parseInt(input.sharedMemoryPerBlock) + blockCudaRuntimeSharedMemory(), config.sharedMemoryAllocationUnitSize);
     };
     threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor = function() {
       return Math.min(config.threadBlocksPerMultiprocessor, Math.floor(config.warpsPerMultiprocessor / blockWarps()));
@@ -337,6 +337,7 @@
       occupancyOfMultiprocessor: occupancyOfMultiprocessor(),
       blockWarps: blockWarps(),
       blockSharedMemory: blockSharedMemory(),
+      blockCudaRuntimeSharedMemory: blockCudaRuntimeSharedMemory(),
       blockRegisters: blockRegisters(),
       threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor: threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor(),
       threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor: threadBlocksPerMultiprocessorLimitedByRegistersPerMultiprocessor(),

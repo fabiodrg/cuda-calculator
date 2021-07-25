@@ -318,7 +318,7 @@ window.calculateOccupancy = (input) ->
 
   # starting with Compute Capability 8.x, the CUDA runtime consumes 1KB of shared memory
   # the amount might change depending on the CUDA runtime version in the future
-  cudaRuntimeSharedMemory = () ->
+  blockCudaRuntimeSharedMemory = () ->
     if Number.parseFloat(input.version) >= 8
       cudaRuntimeUsedSharedMemory[input.cudaVersion]
     else
@@ -327,7 +327,7 @@ window.calculateOccupancy = (input) ->
   # shared memory per thread block
   blockSharedMemory = () ->
     ceil(
-      Number.parseInt(input.sharedMemoryPerBlock) + cudaRuntimeSharedMemory(),
+      Number.parseInt(input.sharedMemoryPerBlock) + blockCudaRuntimeSharedMemory(),
       config.sharedMemoryAllocationUnitSize
     )
 
@@ -375,6 +375,7 @@ window.calculateOccupancy = (input) ->
 
     blockWarps: blockWarps()
     blockSharedMemory: blockSharedMemory()
+    blockCudaRuntimeSharedMemory: blockCudaRuntimeSharedMemory()
     blockRegisters: blockRegisters()
 
     threadBlocksPerMultiprocessorLimitedByWarpsOrBlocksPerMultiprocessor:
